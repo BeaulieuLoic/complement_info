@@ -1,32 +1,56 @@
 #!/usr/bin/env python3
 
 import json
-from Installations import Installations as In
+from Installations import Installations
 
-class Serializer(object):
+"""
+this file contains differents method of import/export for differents format 
+"""
+
+def unserialise_installations_json(pathName):
     """
-    this class contains differents method of import/export for differents format 
+    function for unserialise json file in object installs
+    return list of object
     """
+    toReturn = []
+    with open(pathName) as json_file:
+        json_data = json.load(json_file)
 
-    def __init__(self):
-        pass
+        for install in json_data["data"]:                
+            toReturn.append(Installations(
+                install["InsNumeroInstall"],install["ComLib"],
+                install["ComInsee"],install["InsCodePostal"],
+                install["InsLieuDit"],install["InsNoVoie"],
+                install["InsLibelleVoie"],install["Longitude"],
+                install["Latitude"],install["InsAccessibiliteAucun"],
+                install["InsAccessibiliteHandiMoteur"],
+                install["InsAccessibiliteHandiSens"],
+                install["InsEmpriseFonciere"],install["InsGardiennee"],
+                install["InsMultiCommune"],install["InsNbPlaceParking"],
+                install["InsNbPlaceParkingHandi"],install["InsPartLibelle"],
+                install["InsTransportMetro"],install["InsTransportBus"],
+                install["InsTransportTram"],install["InsTransportTrain"],
+                install["InsTransportBateau"],install["InsTransportAutre"],
+                install["Nb_Equipements"],
+                install["InsDateMaj"]))
+    return toReturn
 
-    def unserialise_installations_json(self, pathName):
-        """
-        function for unserialise json file in object Installations
-        return list of object
-        """
-        toReturn = []
-        with open(pathName) as json_file:
-            json_data = json.load(json_file)
+def installations_export_in_dataBase(installationsArray, pathFile):
+    """
+    unserialise a json's file and export in dataBase SQLite
+    installationsArray: array of Installations's object
+    pathFile: path of SQLite's file
+    """
+    i = 0
+    for install in installationsArray:
+        install.exportToDataBase(pathFile)
+        i = i + 1
+        print(i)
 
-            for installation in json_data["data"]:
-                installation[""]                
-                toReturn.append(Installations(installation["insNom"],installation["InsNumeroInstall"],installation["ComLib"],installation["ComInsee"],installation["InsCodePostal"],installation["InsLieuDit"],installation["InsNoVoie"],installation["InsLibelleVoie"],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""],installation[""]))
-
-
-            #print(json_data["data"][0])
 
 if __name__ == "__main__":
-    tmp = Serialisation()
-    tmp.unSerialise_Installations_json("installations.json")
+    pathInstallationDataBase = "../../dataBase/dataBase.db"
+
+    installationArray = unserialise_installations_json("installations.json")
+
+    installations_export_in_dataBase(installationArray,pathInstallationDataBase)
