@@ -33,3 +33,24 @@ def initDataBaseInstallation(path):
 
     conn.commit()
     conn.close()
+
+def initDataBaseActivity(path):
+    """
+    Create table Activity in file path
+    """
+
+    conn = sqlite3.connect(path)
+    c = conn.cursor()
+
+    c.execute("DROP TABLE IF EXISTS Activity")
+    c.execute('''CREATE TABLE Activity
+                (
+                    inseeNb TEXT, comLib TEXT, equipementId TEXT,
+                    equNbEquIdentique TEXT, actCode TEXT,actLib TEXT,
+                    equActivitePraticable TEXT, equActivitePratique TEXT,
+                    equActiviteSalleSpe TEXT, actNivLib TEXT
+                )'''
+    )
+
+    conn.commit()
+    conn.close()

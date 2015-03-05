@@ -119,8 +119,6 @@ class Installations(object):
                 self.servOther , self.numberEquip , self.installUpd)
 
         c.execute("INSERT INTO Installations VALUES ("+value+")")
-        
-
         conn.commit()
 
 
