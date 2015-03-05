@@ -75,5 +75,5 @@ def object_export_in_dataBase(objectArray, pathFile):
     for obj in objectArray:
         obj.exportToDataBase(conn)
         i = i + 1
-        print(i)
+        #print(i)
     conn.close()

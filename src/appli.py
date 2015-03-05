@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 
 from dataBase import DataBase
 from serialiser import Serializer
@@ -15,20 +16,27 @@ pathDataBase = "dataBase.db"
 installationArray = []
 activityArray = []
 
+pid = os.fork()
+
 '''
 creation of dataBase and table
 '''
-#DataBase.initDataBaseInstallation(pathDataBase)
+DataBase.initDataBaseInstallation(pathDataBase)
 DataBase.initDataBaseActivity(pathDataBase)
 
 '''
 unserialise json file
 '''
-#installationArray = Serializer.unserialise_installations_json(pathInstallationsJson)
-activityArray = Serializer.unserialise_activity_json(pathActivityJson)
+if pid:
+	installationArray = Serializer.unserialise_installations_json(pathInstallationsJson)
+else:
+	activityArray = Serializer.unserialise_activity_json(pathActivityJson)
 
 '''
 insert Array into dataBase
 '''
-#Serializer.object_export_in_dataBase(installationArray,pathDataBase)
-Serializer.object_export_in_dataBase(activityArray,pathDataBase)
+if pid:
+	Serializer.object_export_in_dataBase(installationArray,pathDataBase)
+	
+else:
+	Serializer.object_export_in_dataBase(activityArray,pathDataBase)
