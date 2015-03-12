@@ -6,7 +6,7 @@ this file contains differents method for create table in a SQLite3 file
 
 
 
-def initDataBaseInstallation(path):
+def init_data_base_installation(path):
 
     """
     Create table installations in file path
@@ -34,7 +34,7 @@ def initDataBaseInstallation(path):
     conn.commit()
     conn.close()
 
-def initDataBaseActivity(path):
+def init_data_base_activity(path):
     """
     Create table Activity in file path
     """
@@ -55,7 +55,7 @@ def initDataBaseActivity(path):
     conn.commit()
     conn.close()
 
-def initDataBaseEquipment(path):
+def init_data_base_equipment(path):
     """
     Create table Equipment in file path
     """

@@ -16,26 +16,33 @@ def unserialise_installations_json(pathName):
     return list of Installation object
     """
     to_return = []
-    with open(pathName) as json_file:
-        json_data = json.load(json_file)
 
-        for install in json_data["data"]:
-            to_return.append(Installations(
-                install["InsNumeroInstall"],install["ComLib"],
-                install["ComInsee"],install["InsCodePostal"],
-                install["InsLieuDit"],install["InsNoVoie"],
-                install["InsLibelleVoie"],install["Longitude"],
-                install["Latitude"],install["InsAccessibiliteAucun"],
-                install["InsAccessibiliteHandiMoteur"],
-                install["InsAccessibiliteHandiSens"],
-                install["InsEmpriseFonciere"],install["InsGardiennee"],
-                install["InsMultiCommune"],install["InsNbPlaceParking"],
-                install["InsNbPlaceParkingHandi"],install["InsPartLibelle"],
-                install["InsTransportMetro"],install["InsTransportBus"],
-                install["InsTransportTram"],install["InsTransportTrain"],
-                install["InsTransportBateau"],install["InsTransportAutre"],
-                install["Nb_Equipements"],
-                install["InsDateMaj"]))
+    try:
+        with open(pathName) as json_file:
+            json_data = json.load(json_file)
+
+            for install in json_data["data"]:
+                to_return.append(Installations(
+                    install["InsNumeroInstall"],install["ComLib"],
+                    install["ComInsee"],install["InsCodePostal"],
+                    install["InsLieuDit"],install["InsNoVoie"],
+                    install["InsLibelleVoie"],install["Longitude"],
+                    install["Latitude"],install["InsAccessibiliteAucun"],
+                    install["InsAccessibiliteHandiMoteur"],
+                    install["InsAccessibiliteHandiSens"],
+                    install["InsEmpriseFonciere"],install["InsGardiennee"],
+                    install["InsMultiCommune"],install["InsNbPlaceParking"],
+                    install["InsNbPlaceParkingHandi"],install["InsPartLibelle"],
+                    install["InsTransportMetro"],install["InsTransportBus"],
+                    install["InsTransportTram"],install["InsTransportTrain"],
+                    install["InsTransportBateau"],install["InsTransportAutre"],
+                    install["Nb_Equipements"],
+                    install["InsDateMaj"]))
+    except FileNotFoundError:
+        print("bad path of activity json file")
+    except KeyError:
+        print("bad json file, see documentation of activity for see who is construct this object")
+        
     return to_return
 
 def unserialise_activity_json(pathName):
@@ -44,21 +51,27 @@ def unserialise_activity_json(pathName):
     return list of Activity object
     """
     to_return = []
-    with open(pathName) as json_file:
-        json_data = json.load(json_file)
 
-        for activity in json_data["data"]:
-            to_return.append(
-                Activity(
-                    activity["ComInsee"],activity["ComLib"],
-                    activity["EquipementId"],activity["EquNbEquIdentique"],
-                    activity["ActCode"],
-                    activity["ActLib"],activity["EquActivitePraticable"],
-                    activity["EquActivitePratique"],
-                    activity["EquActiviteSalleSpe"],
-                    activity["ActNivLib"]
+    try:
+        with open(pathName) as json_file:
+            json_data = json.load(json_file)
+
+            for activity in json_data["data"]:
+                to_return.append(
+                    Activity(
+                        activity["ComInsee"],activity["ComLib"],
+                        activity["EquipementId"],activity["EquNbEquIdentique"],
+                        activity["ActCode"],
+                        activity["ActLib"],activity["EquActivitePraticable"],
+                        activity["EquActivitePratique"],
+                        activity["EquActiviteSalleSpe"],
+                        activity["ActNivLib"]
+                    )
                 )
-            )
+    except FileNotFoundError:
+        print("bad path of activity json file")
+    except KeyError:
+        print("bad json file, see documentation of activity for see who is construct this object")
 
     return to_return
 
@@ -68,17 +81,24 @@ def unserialise_equipment_json(pathName):
     return list of Equipement object
     """
     to_return = []
-    with open(pathName) as json_file:
-        json_data = json.load(json_file)
+    try:
+        with open(pathName) as json_file:
+            json_data = json.load(json_file)
 
-        for equipment in json_data["data"]:
-            to_return.append(
-                Equipment(
-                    equipment["ComInsee"],equipment["ComLib"],
-                    equipment["EquipementFiche"],equipment["EquAnneeService"],
-                    equipment["EquNom"],equipment["EquNomBatiment"]
+            for equipment in json_data["data"]:
+                to_return.append(
+                    Equipment(
+                        equipment["ComInsee"],equipment["ComLib"],
+                        equipment["EquipementFiche"],equipment["EquAnneeService"],
+                        equipment["EquNom"],equipment["EquNomBatiment"]
+                    )
                 )
-            )
+    except FileNotFoundError:
+        print("bad path of equipment json file")
+    except KeyError:
+        print("bad json file, see documentation of equipment for see who is construct this object")
+
+
 
     return to_return
 
@@ -99,6 +119,5 @@ def object_export_in_dataBase(objectArray, pathFile):
         except AttributeError:
             print("object need to implement the function: \'export_to_data_base\'")
 
-        
     conn.commit()
     conn.close()

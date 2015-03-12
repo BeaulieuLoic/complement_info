@@ -13,19 +13,25 @@ class WebManager(object):
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
 
-        to_return = "nombre d'object dans la base de donnée: <ul>"
+        to_return = "structure de la base de donnée: <ul>"
 
         for row in c.execute('SELECT count(*) FROM Installations'):
-            to_return = to_return + "<li> Installations: " + str(row).replace(",","").replace("(","").replace(")","")
+            to_return = to_return + "<li>" 
+            to_return = to_return + "<a href=\"installations\">Installations:</a>"
+            to_return = to_return + str(row).replace(",","").replace("(","").replace(")","")
             to_return = to_return + "</li>" 
 
         for row in c.execute('SELECT count(*) FROM Activity'):
-            to_return = to_return +"<li> Activity: " +str(row).replace(",","").replace("(","").replace(")","")
-            to_return = to_return + "</li>"
+            to_return = to_return + "<li>" 
+            to_return = to_return + "<a href=\"activity\">Activity:</a>"
+            to_return = to_return + str(row).replace(",","").replace("(","").replace(")","")
+            to_return = to_return + "</li>" 
 
         for row in c.execute('SELECT count(*) FROM Equipment'):
-            to_return = to_return +"<li> Equipment: " +str(row).replace(",","").replace("(","").replace(")","")
-            to_return = to_return + "</li>"
+            to_return = to_return + "<li>" 
+            to_return = to_return + "<a href=\"equipment\">Equipment:</a>"
+            to_return = to_return + str(row).replace(",","").replace("(","").replace(")","")
+            to_return = to_return + "</li>" 
 
         return to_return+"</ul>"
 
@@ -66,7 +72,7 @@ class WebManager(object):
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
 
-        to_return = "table activity"
+        to_return = "table activity </br>"
         to_return = to_return + "<table border=\"1\"> "
 
         to_return = to_return +"<tr>"
@@ -102,7 +108,7 @@ class WebManager(object):
 
     @cherrypy.expose
     def installations(self):
-        to_return = "table Installations"
+        to_return = "table Installations </br>"
         to_return = to_return +"trop long a faire"
 
         return to_return

@@ -1,42 +1,41 @@
 #!/usr/bin/env python3
-import os
+
 
 from dataBase import DataBase
 from serialiser import Serializer
 
-from modele.Installations import Installations
-from modele.Activity import Activity
 
+path_installations_json = "../data/installations/installations.json"
+path_activity_json = "../data/activités/activités.json"
+path_equipment_json = "../data/equipements/equipements.json"
 
-pathInstallationsJson = "../data/installations/installations.json"
-pathActivityJson = "../data/activités/activités.json"
-pathEquipmentJson = "../data/equipements/equipements.json"
+path_data_base = "dataBase.db"
 
-pathDataBase = "dataBase.db"
-
-installationArray = []
-activityArray = []
+installation_Array = []
+activity_Array = []
 equipmentArray = []
 
 
 '''
 creation of dataBase and table
 '''
-DataBase.initDataBaseInstallation(pathDataBase)
-DataBase.initDataBaseActivity(pathDataBase)
-DataBase.initDataBaseEquipment(pathDataBase)
+print("creation of data base and tables ...")
+DataBase.init_data_base_installation(path_data_base)
+DataBase.init_data_base_activity(path_data_base)
+DataBase.init_data_base_equipment(path_data_base)
 
 '''
 unserialise json file
 '''
-installationArray = Serializer.unserialise_installations_json(pathInstallationsJson)
-activityArray = Serializer.unserialise_activity_json(pathActivityJson)
-equipmentArray = Serializer.unserialise_equipment_json(pathEquipmentJson)
+print("unserialise json files ...")
+installationArray = Serializer.unserialise_installations_json(path_installations_json)
+activityArray = Serializer.unserialise_activity_json(path_activity_json)
+equipmentArray = Serializer.unserialise_equipment_json(path_equipment_json)
 
 '''
 insert Array into dataBase
 '''
-
-Serializer.object_export_in_dataBase(installationArray,pathDataBase)
-Serializer.object_export_in_dataBase(activityArray,pathDataBase)
-Serializer.object_export_in_dataBase(equipmentArray,pathDataBase)
+print("insert json objects into data base ...")
+Serializer.object_export_in_dataBase(installationArray,path_data_base)
+Serializer.object_export_in_dataBase(activityArray,path_data_base)
+Serializer.object_export_in_dataBase(equipmentArray,path_data_base)
