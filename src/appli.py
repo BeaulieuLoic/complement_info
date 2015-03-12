@@ -10,33 +10,33 @@ from modele.Activity import Activity
 
 pathInstallationsJson = "../data/installations/installations.json"
 pathActivityJson = "../data/activités/activités.json"
+pathEquipmentJson = "../data/equipements/equipements.json"
 
 pathDataBase = "dataBase.db"
 
 installationArray = []
 activityArray = []
+equipmentArray = []
 
-pid = os.fork()
 
 '''
 creation of dataBase and table
 '''
 DataBase.initDataBaseInstallation(pathDataBase)
 DataBase.initDataBaseActivity(pathDataBase)
+DataBase.initDataBaseEquipment(pathDataBase)
 
 '''
 unserialise json file
 '''
-if pid:
-	installationArray = Serializer.unserialise_installations_json(pathInstallationsJson)
-else:
-	activityArray = Serializer.unserialise_activity_json(pathActivityJson)
+installationArray = Serializer.unserialise_installations_json(pathInstallationsJson)
+activityArray = Serializer.unserialise_activity_json(pathActivityJson)
+equipmentArray = Serializer.unserialise_equipment_json(pathEquipmentJson)
 
 '''
 insert Array into dataBase
 '''
-if pid:
-	Serializer.object_export_in_dataBase(installationArray,pathDataBase)
-	
-else:
-	Serializer.object_export_in_dataBase(activityArray,pathDataBase)
+
+Serializer.object_export_in_dataBase(installationArray,pathDataBase)
+Serializer.object_export_in_dataBase(activityArray,pathDataBase)
+Serializer.object_export_in_dataBase(equipmentArray,pathDataBase)

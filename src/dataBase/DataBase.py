@@ -54,3 +54,21 @@ def initDataBaseActivity(path):
 
     conn.commit()
     conn.close()
+
+def initDataBaseEquipment(path):
+    """
+    Create table Equipment in file path
+    """
+
+    conn = sqlite3.connect(path)
+    c = conn.cursor()
+
+    c.execute("DROP TABLE IF EXISTS Equipment")
+    c.execute('''CREATE TABLE Equipment
+        (
+            comInsee text, comLib text,equipmentFile text,
+            equAnneeService text, equNom text , equNomBatiment text
+            )'''
+    )
+    conn.commit()
+    conn.close()

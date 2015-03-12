@@ -4,6 +4,7 @@ import json
 import sqlite3
 from modele.Installations import Installations
 from modele.Activity import Activity
+from modele.Equipment import Equipment
 
 """
 this file contains differents method of import/export for differents format 
@@ -14,12 +15,12 @@ def unserialise_installations_json(pathName):
     function for unserialise json file in object installation
     return list of Installation object
     """
-    toReturn = []
+    to_return = []
     with open(pathName) as json_file:
         json_data = json.load(json_file)
 
         for install in json_data["data"]:
-            toReturn.append(Installations(
+            to_return.append(Installations(
                 install["InsNumeroInstall"],install["ComLib"],
                 install["ComInsee"],install["InsCodePostal"],
                 install["InsLieuDit"],install["InsNoVoie"],
@@ -35,19 +36,19 @@ def unserialise_installations_json(pathName):
                 install["InsTransportBateau"],install["InsTransportAutre"],
                 install["Nb_Equipements"],
                 install["InsDateMaj"]))
-    return toReturn
+    return to_return
 
 def unserialise_activity_json(pathName):
     """
     function for unserialise json file in object installs
     return list of Activity object
     """
-    toReturn = []
+    to_return = []
     with open(pathName) as json_file:
         json_data = json.load(json_file)
 
         for activity in json_data["data"]:
-            toReturn.append(
+            to_return.append(
                 Activity(
                     activity["ComInsee"],activity["ComLib"],
                     activity["EquipementId"],activity["EquNbEquIdentique"],
@@ -59,7 +60,28 @@ def unserialise_activity_json(pathName):
                 )
             )
 
-    return toReturn
+    return to_return
+
+def unserialise_equipment_json(pathName):
+    """
+    function for unserialise json file in object equipment
+    return list of Equipement object
+    """
+    to_return = []
+    with open(pathName) as json_file:
+        json_data = json.load(json_file)
+
+        for equipment in json_data["data"]:
+            to_return.append(
+                Equipment(
+                    equipment["ComInsee"],equipment["ComLib"],
+                    equipment["EquipementFiche"],equipment["EquAnneeService"],
+                    equipment["EquNom"],equipment["EquNomBatiment"]
+                )
+            )
+
+    return to_return
+
 
 
 def object_export_in_dataBase(objectArray, pathFile):
@@ -69,11 +91,14 @@ def object_export_in_dataBase(objectArray, pathFile):
     pathFile: path of SQLite's file
     object in array need to implement exportToDataBase fucntion
     """
-    i = 0
     conn = sqlite3.connect(pathFile)
 
     for obj in objectArray:
-        obj.exportToDataBase(conn)
-        i = i + 1
-        #print(i)
+        try:
+            obj.export_to_data_base(conn)
+        except AttributeError:
+            print("object need to implement the function: \'export_to_data_base\'")
+
+        
+    conn.commit()
     conn.close()

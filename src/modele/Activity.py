@@ -32,7 +32,7 @@ class Activity :
     export Installations object in data file SQLite3
     filePath: path of SQLite3's file
     """
-    def exportToDataBase(self, conn):
+    def export_to_data_base(self, conn):
         c = conn.cursor()
 
         value = "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\"".format(
@@ -41,4 +41,3 @@ class Activity :
                 self.equActivitePratique , self.equActiviteSalleSpe, self.actNivLib)
 
         c.execute("INSERT INTO Activity VALUES ("+value+")")
-        conn.commit()
