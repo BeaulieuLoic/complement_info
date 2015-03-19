@@ -10,125 +10,149 @@ class WebManager(object):
 
     @cherrypy.expose
     def index(self):
+        """
+        default page, display all table in data base and the number of 
+        elements in every table. you can click on the name of table for 
+        display all elements of table, or use search function
+        """
+
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
 
-        to_return = "structure de la base de donnée: <ul>"
+        toReturn = "structure de la base de donnée: <ul>"
 
         for row in c.execute('SELECT count(*) FROM Installations'):
-            to_return = to_return + "<li>" 
-            to_return = to_return + "<a href=\"installations\">Installations:</a>"
-            to_return = to_return + str(row).replace(",","").replace("(","").replace(")","")
-            to_return = to_return + "</li>" 
-
+            toReturn = toReturn + "<li>" 
+            toReturn = toReturn + "<a href=\"installations\">Installations:</a>"
+            toReturn = toReturn + str(row).replace(",","").replace("(","").replace(")","")
+            toReturn = toReturn + "</li>" 
         for row in c.execute('SELECT count(*) FROM Activity'):
-            to_return = to_return + "<li>" 
-            to_return = to_return + "<a href=\"activity\">Activity:</a>"
-            to_return = to_return + str(row).replace(",","").replace("(","").replace(")","")
-            to_return = to_return + "</li>" 
-
+            toReturn = toReturn + "<li>" 
+            toReturn = toReturn + "<a href=\"activity\">Activity:</a>"
+            toReturn = toReturn + str(row).replace(",","").replace("(","").replace(")","")
+            toReturn = toReturn + "</li>" 
         for row in c.execute('SELECT count(*) FROM Equipment'):
-            to_return = to_return + "<li>" 
-            to_return = to_return + "<a href=\"equipment\">Equipment:</a>"
-            to_return = to_return + str(row).replace(",","").replace("(","").replace(")","")
-            to_return = to_return + "</li>" 
+            toReturn = toReturn + "<li>" 
+            toReturn = toReturn + "<a href=\"equipment\">Equipment:</a>"
+            toReturn = toReturn + str(row).replace(",","").replace("(","").replace(")","")
+            toReturn = toReturn + "</li>" 
 
         conn.close()
-        return to_return+"</ul>"
+
+        toReturn = toReturn + "<a href=\"searchOption\">search something</a>"
+
+        return toReturn+"</ul>"
 
 
 
     def get_name_of_column(self, table):
+        """
+        return the name of all column of a table
+        """
+
+
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
-        
-        to_return = ""
-        to_return = to_return +"<tr>"
-
+        toReturn = "<tr>"
         for row in c.execute("PRAGMA table_info('"+table+"')").fetchall():
             tmp = 0
             for x in row:
                 if (x.__class__.__name__ == "str") and (tmp%2 == 1):
-                    to_return = to_return +"<td>"+str(x)+"</td>"
+                    toReturn = toReturn +"<td>"+str(x)+"</td>"
                 tmp  = tmp + 1
-
-        to_return = to_return +"</tr>"
-
+        toReturn = toReturn +"</tr>"
         conn.close()
-        return to_return
+        return toReturn
 
     def get_all_element_of_table(self, table):
+        """
+        return all element of table
+        """
+
+
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
-
-        to_return = ""
-
+        toReturn = "<tr>"
         for row in c.execute('SELECT * FROM '+table).fetchall():
-            to_return = to_return + "<tr>"
             for x in row:
-                to_return = to_return + "<td>"+ str(x) + "</td>"
-            to_return = to_return + "</tr>"
-
+                toReturn = toReturn + "<td>"+ str(x) + "</td>"
+            toReturn = toReturn + "</tr>"
         conn.close()
-        return to_return
+        return toReturn
 
-    def get_element_of_table(self, table, nameColumn, data):
+    def search_element_of_table(self, table, nameColumn, data):
+        """
+        search a element in table where nameColumn contain data
+        """
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
-
-        to_return = ""
-
-        for row in c.execute('SELECT * FROM '+table +'where '+nameColumn+" = '"+data+"'").fetchall():
-            to_return = to_return + "<tr>"
+        toReturn = "<tr>"
+        for row in c.execute('SELECT * FROM '+table +' where '+nameColumn+" like '%"+data+"%'").fetchall():
             for x in row:
-                to_return = to_return + "<td>"+ str(x) + "</td>"
-            to_return = to_return + "</tr>"
+                toReturn = toReturn + "<td>"+ str(x) + "</td>"
+            toReturn = toReturn + "</tr>"
 
         conn.close()
-        return to_return
+        return toReturn
 
 
     @cherrypy.expose
     def equipment(self):
-        to_return = "table Equipment"
-        to_return = to_return + "<table border=\"1\"> "
+        """
+        display all elements of equipment
+        """
 
-        to_return = to_return + self.get_name_of_column("Equipment")
-        to_return = to_return + self.get_all_element_of_table("Equipment")
+        toReturn = "table Equipment"
+        toReturn = toReturn + "<table border=\"1\"> "
 
-        return to_return+"</table>"
+        toReturn = toReturn + self.get_name_of_column("Equipment")
+        toReturn = toReturn + self.get_all_element_of_table("Equipment")
+
+        return toReturn+"</table>"
 
 
     @cherrypy.expose
     def activity(self):
+        """
+        display all elements of activity
+        """
 
-        to_return = "table activity </br>"
-        to_return = to_return + "<table border=\"1\"> "
+        toReturn = "table activity </br>"
+        toReturn = toReturn + "<table border=\"1\"> "
 
-        to_return = to_return + self.get_name_of_column("Activity")
-        to_return = to_return + self.get_all_element_of_table("Activity")
+        toReturn = toReturn + self.get_name_of_column("Activity")
+        toReturn = toReturn + self.get_all_element_of_table("Activity")
 
-        return to_return+"</table>"
+        return toReturn+"</table>"
 
     @cherrypy.expose
     def installations(self):
+        """
+        display all elements of installations
+        """
 
-        to_return = "table Installations </br>"
+
+        toReturn = "table Installations </br>"
         
-        to_return = to_return + "<table border=\"1\"> "
+        toReturn = toReturn + "<table border=\"1\"> "
 
-        to_return = to_return + self.get_name_of_column("Installations")
-        to_return = to_return + self.get_all_element_of_table("Installations")
+        toReturn = toReturn + self.get_name_of_column("Installations")
+        toReturn = toReturn + self.get_all_element_of_table("Installations")
 
-        to_return = to_return + "</table>"
+        toReturn = toReturn + "</table>"
 
-        return to_return
+        return toReturn
 
     @cherrypy.expose
     def searchOption(self):
-        to_return = """ 
+        """
+        display form for search elements in data base
+        """
+
+
+        toReturn = """ 
         <h1>Search something in table</h1>
-            <h3>search INSEE number</h3>
+            <h3>search by INSEE number</h3>
 
             <table border=\"1\">
                 <form method="get" action="search_equipment_INSEE">
@@ -144,7 +168,7 @@ class WebManager(object):
                         </td>
                     </tr>
                 </form>
-                <form method="get" action"search_activity_INSEE">
+                <form method="get" action="search_activity_INSEE">
                     <tr>
                         <td>
                             Activity
@@ -157,22 +181,59 @@ class WebManager(object):
                         </td>
                     </tr>
                 </form>
+                <form method="get" action="search_installation_INSEE">
+                    <tr>
+                        <td>
+                            Installations
+                        </td>
+                        <td>
+                            <input type="text" name="searchInstallation">
+                        </td>
+                        <td>
+                            <input type="submit">
+                        </td>
+                    </tr>
+                </form>
             </table>
         """
-        return to_return
-
-    def search_equipment_INSEE(self, searchEquipment):
-        toReturn = ""
-
-        to_return = to_return + "<table border=\"1\"> "
-        to_return = to_return + self.get_name_of_column("Equipment")
-        toReturn = toReturn + get_element_of_table(self, "Equipment", "comInsee", str(searchEquipment)):
-        to_return = to_return + "</table>"
         return toReturn
 
-    def search_activity_INSEE(self, searchActivity):
-        pritn("a")
 
+    @cherrypy.expose
+    def search_equipment_INSEE(self, searchEquipment):
+        """
+        display elements in Equipment where insee contain searchEquipment
+        """
+        toReturn = ""
+        toReturn = toReturn + "<table border=\"1\"> "
+        toReturn = toReturn + self.get_name_of_column("Equipment")
+        toReturn = toReturn + self.search_element_of_table("Equipment", "comInsee", str(searchEquipment))
+        toReturn = toReturn + "</table>"
+        return toReturn
+
+    @cherrypy.expose
+    def search_activity_INSEE(self, searchActivity):
+        """
+        display elements in Equipment where insee contain searchActivity
+        """
+        toReturn = ""
+        toReturn = toReturn + "<table border=\"1\"> "
+        toReturn = toReturn + self.get_name_of_column("Activity")
+        toReturn = toReturn + self.search_element_of_table("Activity", "inseeNb", str(searchActivity))
+        toReturn = toReturn + "</table>"
+        return toReturn
+
+    @cherrypy.expose
+    def search_installation_INSEE(self, searchInstallation):
+        """
+        display elements in Installations where insee contain searchInstallation
+        """
+        toReturn = ""
+        toReturn = toReturn + "<table border=\"1\"> "
+        toReturn = toReturn + self.get_name_of_column("Installations")
+        toReturn = toReturn + self.search_element_of_table("Installations", "INSEE", str(searchInstallation))
+        toReturn = toReturn + "</table>"
+        return toReturn
 
 
 cherrypy.quickstart(WebManager())

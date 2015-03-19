@@ -82,10 +82,11 @@ class Installations(object):
         #self.numberCardEquip = numberCardEquip
         self.installUpd = installUpd
 
+
+    def __str__(self):
         """
         function for display Installations object
         """
-    def __str__(self):
         return ("["+str(self.numInstall)+","+str(self.nameTown)+","+str(self.INSEE)+
         ","+str(self.zipCode)+","+str(self.placeCalled)+","+str(self.numStreet)+
         ","+str(self.nameStreet)+","+str(self.longitude)+","+str(self.latitude)+
@@ -100,11 +101,12 @@ class Installations(object):
         str(self.numberEquip)+","+str(self.installUpd)+
         "]")
 
+
+    def export_to_data_base(self, conn):
         """
         export Installations object in data file SQLite3
         filePath: path of SQLite3's file
         """
-    def export_to_data_base(self, conn):
         c = conn.cursor()
 
         value = "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",{7},{8},\"{9}\",\"{10}\",\"{11}\",\"{12}\",\"{13}\",\"{14}\",\"{15}\",\"{16}\",\"{17}\",\"{18}\",\"{19}\",\"{20}\",\"{21}\",\"{22}\",\"{23}\",\"{24}\",\"{25}\"".format(
