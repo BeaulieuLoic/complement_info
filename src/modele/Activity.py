@@ -5,7 +5,7 @@ class Activity :
     """
     class representing an activity
     has 10 characteristics, 10 have been selected
-    all of thems are Strings
+    all of thems are Strings.
     """
 
     def __init__(self,inseeNb,comLib,equipementId,equNbEquIdentique,actCode,actLib,

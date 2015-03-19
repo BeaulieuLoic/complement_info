@@ -3,7 +3,7 @@ import sqlite3
 
 class Installations(object):
     """
-    docstring for Installations
+    docstring for Installations.
     this class Installations represent file installations
     url:
     http://data.paysdelaloire.fr/donnees/detail/equipements-sportifs-espaces-et-sites-de-pratiques-en-pays-de-la-loire-fiches-installations/

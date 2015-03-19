@@ -2,7 +2,7 @@
 class Equipment :
 	''' class representing an equipment
 	has too many characteristics, 6 have been selected
-	all of thems are Strings
+	all of thems are Strings.
 	'''
 	def __init__(self,comInsee,comLib,equipmentFile,equAnneeService,equNom,equNomBatiment):
 		self.comInsee = comInsee
