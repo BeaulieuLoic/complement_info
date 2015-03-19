@@ -17,7 +17,7 @@ equipmentArray = []
 
 
 '''
-creation of dataBase and tables
+creation of dataBase and table
 '''
 print("creation of data base and tables ...")
 DataBase.init_data_base_installation(path_data_base)
