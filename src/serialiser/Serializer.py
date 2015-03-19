@@ -109,7 +109,7 @@ def object_export_in_dataBase(objectArray, pathFile):
     unserialise a json's file and export in dataBase SQLite
     objectArray: array of object
     pathFile: path of SQLite's file
-    object in array need to implement exportToDataBase fucntion
+    object in array need to implement exportToDataBase fucntion.
     """
     conn = sqlite3.connect(pathFile)
 
