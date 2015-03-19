@@ -17,7 +17,7 @@ equipmentArray = []
 
 
 '''
-creation of dataBase and table
+creation of dataBase and tables
 '''
 print("creation of data base and tables ...")
 DataBase.init_data_base_installation(path_data_base)
@@ -35,7 +35,7 @@ equipmentArray = Serializer.unserialise_equipment_json(path_equipment_json)
 '''
 insert Array into dataBase
 '''
-print("insert json objects into data base ...")
+print("insert array objects into data base ...")
 Serializer.object_export_in_dataBase(installationArray,path_data_base)
 Serializer.object_export_in_dataBase(activityArray,path_data_base)
 Serializer.object_export_in_dataBase(equipmentArray,path_data_base)
