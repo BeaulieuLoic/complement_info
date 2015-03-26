@@ -41,7 +41,7 @@ def unserialise_installations_json(pathName):
     except FileNotFoundError:
         print("bad path of activity json file")
     except KeyError:
-        print("bad json file, see documentation of activity for see who is construct this object")
+        print("bad json file, see documentation of activity for see how is construct this object")
         
     return to_return
 
@@ -71,7 +71,7 @@ def unserialise_activity_json(pathName):
     except FileNotFoundError:
         print("bad path of activity json file")
     except KeyError:
-        print("bad json file, see documentation of activity for see who is construct this object")
+        print("bad json file, see documentation of activity for see how is construct this object")
 
     return to_return
 
@@ -96,7 +96,7 @@ def unserialise_equipment_json(pathName):
     except FileNotFoundError:
         print("bad path of equipment json file")
     except KeyError:
-        print("bad json file, see documentation of equipment for see who is construct this object")
+        print("bad json file, see documentation of equipment for see how is construct this object")
 
 
 

@@ -17,18 +17,8 @@ path_data_base = "dataBase.db"
 installation_Array = []
 activity_Array = []
 equipmentArray = []
+	
 
-def set_path_data_base(path):
-	path_data_base = path
-	if args.init:
-		print("creation of data base and tables ...")
-		DataBase.init_data_base_installation(path_data_base)
-		DataBase.init_data_base_activity(path_data_base)
-		DataBase.init_data_base_equipment(path_data_base)
-	else:
-		if not os.path.isfile(path):
-			print("file don't exists, use --init for create data base")
-			sys.exit()
 
 def set_path_json_installation():
 	path_installations_json=input('Enter the path of json file installations:')
@@ -42,7 +32,7 @@ def set_path_json_equipment():
 
 if __name__ == "__main__":
 
-	parser = argparse.ArgumentParser(description='insert object from json a files in data base.')
+	parser = argparse.ArgumentParser(description='insert object from json files in data base.')
 
 	'''
 	args for set the path of data base 
@@ -60,8 +50,17 @@ if __name__ == "__main__":
 
 	args = parser.parse_args()
 
+	path_data_base = args.path_data_base
 
-	set_path_data_base(args.path_data_base)
+	if args.init:
+		print("creation of data base and tables ...")
+		DataBase.init_data_base_installation(path_data_base)
+		DataBase.init_data_base_activity(path_data_base)
+		DataBase.init_data_base_equipment(path_data_base)
+	else:
+		if not os.path.isfile(path_data_base):
+			print("file don't exists, use --init for create data base")
+			sys.exit()
 
 
 	if args.installations_json:
@@ -81,7 +80,7 @@ if __name__ == "__main__":
 		print("unserialise json equipments and import to data base ...")
 		equipmentArray = Serializer.unserialise_equipment_json(path_equipment_json)
 		Serializer.object_export_in_dataBase(equipmentArray,path_data_base)
-		
+
 
 	"""
 	'''
