@@ -53,9 +53,9 @@ if __name__ == "__main__":
 	'''
 	args for set the path of json file for installations, activity, equipments
 	'''
-	parser.add_argument('-insJson','--installationsJson', action='store_true', help='set optional json file ')
-	parser.add_argument('-actJson','--activityJson', action='store_true', help='set optional json file ')
-	parser.add_argument('-equJson','--equipmentsJson', action='store_true', help='set optional json file ')
+	parser.add_argument('-ins_json','--installations_json', action='store_true', help='set optional json file ')
+	parser.add_argument('-act_json','--activity_json', action='store_true', help='set optional json file ')
+	parser.add_argument('-equ_json','--equipments_json', action='store_true', help='set optional json file ')
 
 
 	args = parser.parse_args()
@@ -64,23 +64,24 @@ if __name__ == "__main__":
 	set_path_data_base(args.path_data_base)
 
 
-	if args.installationsJson:
+	if args.installations_json:
 		set_path_json_installation()
 		print("unserialise json installations and import to data base ...")
 		installationArray = Serializer.unserialise_installations_json(path_installations_json)
 		Serializer.object_export_in_dataBase(installationArray,path_data_base)
 
-	if args.activityJson:
+	if args.activity_json:
 		set_path_json_activity()
 		print("unserialise json activity and import to data base ...")
 		activityArray = Serializer.unserialise_activity_json(path_activity_json)
 		Serializer.object_export_in_dataBase(activityArray,path_data_base)
 
-	if args.equipmentsJson:
+	if args.equipments_json:
 		set_path_json_equipment()
 		print("unserialise json equipments and import to data base ...")
 		equipmentArray = Serializer.unserialise_equipment_json(path_equipment_json)
 		Serializer.object_export_in_dataBase(equipmentArray,path_data_base)
+		
 
 	"""
 	'''

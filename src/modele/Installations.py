@@ -122,7 +122,6 @@ class Installations(object):
 
         c.execute("INSERT INTO Installations VALUES ("+value+")")
 
-
     """
     get and set of all atribute
     """

@@ -104,16 +104,16 @@ def unserialise_equipment_json(pathName):
 
 
 
-def object_export_in_dataBase(objectArray, pathFile):
+def object_export_in_dataBase(object_array, pathFile):
     """
     unserialise a json's file and export in dataBase SQLite
-    objectArray: array of object
+    object_array: array of object
     pathFile: path of SQLite's file
     object in array need to implement exportToDataBase fucntion.
     """
     conn = sqlite3.connect(pathFile)
 
-    for obj in objectArray:
+    for obj in object_array:
         try:
             obj.export_to_data_base(conn)
         except AttributeError:
