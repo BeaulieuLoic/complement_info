@@ -126,7 +126,7 @@ def search_element_of_table(path, table, nameColumn, data):
 def import_equipment_object_in_array(path):
     """
     import all equipment object and insert into an array
-    path: the path of data base where are present object
+    path: the path of data base where are situate object
     """
     conn = sqlite3.connect(path)
     c = conn.cursor()

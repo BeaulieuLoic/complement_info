@@ -17,17 +17,7 @@ path_data_base = "dataBase.db"
 installation_Array = []
 activity_Array = []
 equipmentArray = []
-	
 
-
-def set_path_json_installation():
-	path_installations_json=input('Enter the path of json file installations:')
-
-def set_path_json_activity():
-	path_activity_json=input('Enter the path of json file activity:')
-
-def set_path_json_equipment():
-	path_equipment_json=input('Enter the path of json file equipment:')
 
 
 if __name__ == "__main__":
@@ -52,37 +42,38 @@ if __name__ == "__main__":
 
 	path_data_base = args.path_data_base
 
-	if args.init:
-		print("creation of data base and tables ...")
-		DataBase.init_data_base_installation(path_data_base)
-		DataBase.init_data_base_activity(path_data_base)
-		DataBase.init_data_base_equipment(path_data_base)
-	else:
-		if not os.path.isfile(path_data_base):
-			print("file don't exists, use --init for create data base")
-			sys.exit()
+
+	DataBase.init_data_base_installation(path_data_base)
+	DataBase.init_data_base_activity(path_data_base)
+	DataBase.init_data_base_equipment(path_data_base)
 
 
 	if args.installations_json:
-		set_path_json_installation()
+		path_installations_json=input('Enter the path of json file installations:')
+
 		print("unserialise json installations and import to data base ...")
+
 		installationArray = Serializer.unserialise_installations_json(path_installations_json)
 		Serializer.object_export_in_dataBase(installationArray,path_data_base)
 
 	if args.activity_json:
-		set_path_json_activity()
+		path_activity_json=input('Enter the path of json file activity:')
+
 		print("unserialise json activity and import to data base ...")
 		activityArray = Serializer.unserialise_activity_json(path_activity_json)
 		Serializer.object_export_in_dataBase(activityArray,path_data_base)
 
 	if args.equipments_json:
-		set_path_json_equipment()
+		path_equipment_json=input('Enter the path of json file equipment:')
+
 		print("unserialise json equipments and import to data base ...")
 		equipmentArray = Serializer.unserialise_equipment_json(path_equipment_json)
 		Serializer.object_export_in_dataBase(equipmentArray,path_data_base)
 
 
 	"""
+	test
+
 	'''
 	creation of dataBase and table
 	'''

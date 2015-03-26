@@ -3,23 +3,25 @@ import sqlite3
 from dataBase import DataBase as db
 import argparse
 import os
+import sys
 
 pathDataBase = "dataBase.db"
 
 
-def set_path_data_base(path):
-    path_data_base = path
-    if not os.path.isfile(path):
+
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='web service.')
+    parser.add_argument('path_data_base', metavar='path_data_base', type=str, help='set the data base path')
+
+    args = parser.parse_args()
+
+    pathDataBase = args.path_data_base
+    if not os.path.isfile(args.path_data_base):
         print("Error: file don't exists !")
         sys.exit()
 
-
-
-parser = argparse.ArgumentParser(description='web service.')
-parser.add_argument('path_data_base', metavar='path_data_base', type=str, help='set the data base path')
-
-args = parser.parse_args()
-set_path_data_base(args.path_data_base)
 
 class WebManager(object):
 
@@ -34,7 +36,7 @@ class WebManager(object):
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
 
-        to_return = "structure de la base de donnée: <ul>"
+        to_return = "structure of the database: <ul>"
 
         for row in c.execute('SELECT count(*) FROM Installations'):
             to_return = to_return + "<li>" 

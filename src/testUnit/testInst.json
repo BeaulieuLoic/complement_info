@@ -1,0 +1,39 @@
+{
+	"version":"1",
+	"nb_results":1,
+	"data":[
+		{
+			"InsNbPlaceParking" : "5000" , 
+			"_l" : [ 47.552265 , -1.532627] , 
+			"Nb_Equipements" : "4" , 
+			"InsDateMaj" : "9999-99-99" , 
+			"InsPartLibelle" : "Non" , 
+			"InsMultiCommune" : "Non" , 
+			"InsTransportAutre" : "Non" , 
+			"InsLieuDit" :  null  , 
+			"InsTransportTram" : "Non" , 
+			"InsTransportTrain" : "Non" , 
+			"Latitude" : 47.552265 , 
+			"InsAccessibiliteAucun" : "Oui" , 
+			"InsNbPlaceParkingHandi" : "0" , 
+			"InsTransportBateau" : "Non" , 
+			"InsGardiennee" : "Non" , 
+			"geo" : { 
+				"name" : "Terrain de Sports"
+				} , 
+			"InsNumeroInstall" : "99999999" , 
+			"InsCodePostal" : "99000" , 
+			"InsAccessibiliteHandiSens" : "Non" , 
+			"InsTransportMetro" : "Non" , 
+			"InsAccessibiliteHandiMoteur" : "Non" , 
+			"Nb_FicheEquipement" : "3" , 
+			"ComLib" : "Abbaretz" , 
+			"InsLibelleVoie" : "Le Bois Vert" , 
+			"InsEmpriseFonciere" : "0" , 
+			"Longitude" : -1.532627 , 
+			"ComInsee" : "44001" , 
+			"InsTransportBus" : "Oui" , 
+			"InsNoVoie" :  null 
+		}
+	]
+}
