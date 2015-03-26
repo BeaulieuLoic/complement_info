@@ -48,7 +48,7 @@ def unserialise_installations_json(pathName):
 def unserialise_activity_json(pathName):
     """
     function for unserialise json file in object installs
-    return list of Activity object
+    return list of Activity object.
     """
     to_return = []
 
