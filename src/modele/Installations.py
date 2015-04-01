@@ -101,12 +101,11 @@ class Installations(object):
         str(self.numberEquip)+","+str(self.installUpd)+
         "]")
 
-
+        """
+    export Installations object in data file SQLite3
+    conn: open connexion for data base
+    """
     def export_to_data_base(self, conn):
-        """
-        export Installations object in data file SQLite3
-        filePath: path of SQLite3's file
-        """
         c = conn.cursor()
 
         value = "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",{7},{8},\"{9}\",\"{10}\",\"{11}\",\"{12}\",\"{13}\",\"{14}\",\"{15}\",\"{16}\",\"{17}\",\"{18}\",\"{19}\",\"{20}\",\"{21}\",\"{22}\",\"{23}\",\"{24}\",\"{25}\"".format(

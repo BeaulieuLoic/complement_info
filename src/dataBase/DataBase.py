@@ -1,4 +1,6 @@
 import sqlite3
+import modele.Activity
+
 
 """
 this file contains differents method for create table in a SQLite3 file 
@@ -33,6 +35,16 @@ def init_data_base_installation(path):
 
     conn.commit()
     conn.close()
+
+def make_query(path, query):
+    conn = sqlite3.connect(path)
+    c = conn.cursor()
+
+    result = c.execute(query).fetchall()
+
+    conn.commit()
+    conn.close()
+    return result
 
 def init_data_base_activity(path):
     """
@@ -77,6 +89,8 @@ def init_data_base_equipment(path):
 def get_name_of_column_in_array(path, table):
     """
     return the name of all column in a array
+    path: path of data base
+    table: name of table
     """
     conn = sqlite3.connect(path)
     c = conn.cursor()
@@ -94,20 +108,23 @@ def get_name_of_column_in_array(path, table):
 def get_all_element_of_table(path, table):
     """
     return all element of table
+    path: path of data base
+    table: name of table
     """
     conn = sqlite3.connect(path)
     c = conn.cursor()
-    to_return = "<tr>"
+    to_return = []
     for row in c.execute('SELECT * FROM '+table).fetchall():
         for x in row:
-            to_return = to_return + "<td>"+ str(x) + "</td>"
-        to_return = to_return + "</tr>"
+            to_return.append(x)
     conn.close()
     return to_return
 
 def search_element_of_table(path, table, nameColumn, data):
     """
     search a element in table where nameColumn contain data
+    path: path of data base
+    table: name of table
     """
     conn = sqlite3.connect(path)
     c = conn.cursor()
@@ -119,6 +136,8 @@ def search_element_of_table(path, table, nameColumn, data):
 
     conn.close()
     return to_return
+
+
 
 
 
@@ -135,3 +154,23 @@ def import_equipment_object_in_array(path):
         to_return.append(Equipment(row[0],row[1],row[2],row[3],row[4],row[5]))
     conn.close()
     return to_return
+
+def import_activity_object_in_array(path):
+    """
+    import all activity object and insert into an array
+    path: the path of data base where are situate object
+    """
+    conn = sqlite3.connect(path)
+    c = conn.cursor()
+    to_return = []
+    for row in c.execute('SELECT * FROM '+"Activity").fetchall():
+        to_return.append(Activity(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]))
+    conn.close()
+    return to_return
+    
+def import_installations_object_in_array(path):
+    """
+    import all installations object and insert into an array
+    path: the path of data base where are situate object
+    """
+    return "todo"

@@ -5,6 +5,8 @@ from serialiser import Serializer
 import argparse
 import os
 import sys
+
+
 '''
 set default value for test appli
 '''
@@ -17,7 +19,6 @@ path_data_base = "dataBase.db"
 installation_Array = []
 activity_Array = []
 equipmentArray = []
-
 
 
 if __name__ == "__main__":

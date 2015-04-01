@@ -30,7 +30,7 @@ class Activity :
 
     """
     export Installations object in data file SQLite3
-    filePath: path of SQLite3's file
+    conn: open connexion for data base
     """
     def export_to_data_base(self, conn):
         c = conn.cursor()

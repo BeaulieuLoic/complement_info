@@ -5,23 +5,6 @@ import argparse
 import os
 import sys
 
-pathDataBase = "dataBase.db"
-
-
-
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='web service.')
-    parser.add_argument('path_data_base', metavar='path_data_base', type=str, help='set the data base path')
-
-    args = parser.parse_args()
-
-    pathDataBase = args.path_data_base
-    if not os.path.isfile(args.path_data_base):
-        print("Error: file don't exists !")
-        sys.exit()
-
 
 class WebManager(object):
 
@@ -36,89 +19,61 @@ class WebManager(object):
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
 
-        to_return = "structure of the database: <ul>"
+        to_return = "database: <ul>"
 
-        for row in c.execute('SELECT count(*) FROM Installations'):
-            to_return = to_return + "<li>" 
-            to_return = to_return + "<a href=\"installations\">Installations:</a>"
-            to_return = to_return + str(row).replace(",","").replace("(","").replace(")","")
-            to_return = to_return + "</li>" 
-        for row in c.execute('SELECT count(*) FROM Activity'):
-            to_return = to_return + "<li>" 
-            to_return = to_return + "<a href=\"activity\">Activity:</a>"
-            to_return = to_return + str(row).replace(",","").replace("(","").replace(")","")
-            to_return = to_return + "</li>" 
-        for row in c.execute('SELECT count(*) FROM Equipment'):
-            to_return = to_return + "<li>" 
-            to_return = to_return + "<a href=\"equipment\">Equipment:</a>"
-            to_return = to_return + str(row).replace(",","").replace("(","").replace(")","")
-            to_return = to_return + "</li>" 
+        nbrIns = c.execute('SELECT count(*) FROM Installations').fetchone()
+        to_return = to_return + "<li>" 
+        to_return = to_return + "<a href=\"afficherTable?table=Installations\">number of Installations object: </a>"
+        to_return = to_return + str(nbrIns).replace(",","").replace("(","").replace(")","")
+        to_return = to_return + "</li>" 
 
+
+        nbrAct = c.execute('SELECT count(*) FROM Activity').fetchone()
+        to_return = to_return + "<li>" 
+        to_return = to_return + "<a href=\"afficherTable?table=Activity\">number of Activity object: </a>"
+        to_return = to_return + str(nbrAct).replace(",","").replace("(","").replace(")","")
+        to_return = to_return + "</li>" 
+        
+        nbrEqu = c.execute('SELECT count(*) FROM Equipment').fetchone()
+        to_return = to_return + "<li>" 
+        to_return = to_return + "<a href=\"afficherTable?table=Equipment\">number of Equipment: </a>"
+        to_return = to_return + str(nbrEqu).replace(",","").replace("(","").replace(")","")
+        to_return = to_return + "</li>" 
+        to_return = to_return +"</ul>"
         conn.close()
-
         to_return = to_return + "<a href=\"searchOption\">search something</a>"
+        to_return = to_return + "</br> <a href=\"SQL?query=init\">make query in sqLite data base</a>"
+
 
         return to_return+"</ul>"
 
-
     @cherrypy.expose
-    def equipment(self):
+    def afficherTable(self, table):
         """
         display all elements of equipment
         """
-
-        to_return = "table Equipment"
+        to_return = "table "+str(table)
         to_return = to_return + "<table border=\"1\"> "
 
+        nbrColumns = 0
         to_return = to_return + "<tr>"
-        for field in db.get_name_of_column_in_array(pathDataBase, "Equipment"):
+        for field in db.get_name_of_column_in_array(pathDataBase, str(table)):
             to_return = to_return + "<td>"+field+"</td>"
+            nbrColumns = nbrColumns + 1
         to_return = to_return + "</tr>"
 
-
-        to_return = to_return + db.get_all_element_of_table(pathDataBase, "Equipment")
+        tmp = 0
+        for elem in db.get_all_element_of_table(pathDataBase, str(table)):
+            if tmp==0:
+                to_return = to_return + "<tr>" 
+            
+            to_return = to_return + "<td>"+str(elem)+"</td>"
+            if tmp == nbrColumns-1:
+                to_return = to_return + "<tr>"
+                tmp =-1
+            tmp = tmp + 1
 
         return to_return+"</table>"
-
-
-    @cherrypy.expose
-    def activity(self):
-        """
-        display all elements of activity
-        """
-
-        to_return = "table activity </br>"
-        to_return = to_return + "<table border=\"1\"> "
-
-        to_return = to_return + "<tr>"
-        for field in db.get_name_of_column_in_array(pathDataBase, "Activity"):
-            to_return = to_return + "<td>"+field+"</td>"
-        to_return = to_return + "</tr>"
-
-        to_return = to_return + db.get_all_element_of_table(pathDataBase, "Activity")
-
-        return to_return+"</table>"
-
-    @cherrypy.expose
-    def installations(self):
-        """
-        display all elements of installations
-        """
-
-        to_return = "table Installations </br>"
-        
-        to_return = to_return + "<table border=\"1\"> "
-
-        to_return = to_return + "<tr>"
-        for field in db.get_name_of_column_in_array(pathDataBase, "Installations"):
-            to_return = to_return + "<td>"+field+"</td>"
-        to_return = to_return + "</tr>"
-
-        to_return = to_return + db.get_all_element_of_table(pathDataBase, "Installations")
-
-        to_return = to_return + "</table>"
-
-        return to_return
 
     @cherrypy.expose
     def searchOption(self):
@@ -130,13 +85,13 @@ class WebManager(object):
         to_return = to_return +""" 
         <h1>Search something in table</h1>
             <table border=\"1\">
-                <form method="get" action="search_equipment">
+                <form method="get" action="search">
                     <tr>
                         <td>
-                            Equipment
+                            <p name="table" value="Equipment">Equipment</p>
                         </td>
                         <td>
-                            <input type="text" name="searchEquipment">
+                            <input type="text" name="toSearch">
                         </td>
                         <td>
                             <select name="field">
@@ -152,6 +107,7 @@ class WebManager(object):
                             <input type="submit">
                         </td>
                     </tr>
+                    <input style="display: none" name="table" value="Equipment">
                 </form>
                 <form method="get" action="search_activity">
                     <tr>
@@ -202,58 +158,56 @@ class WebManager(object):
             </table>
         """
         return to_return
-
-
     @cherrypy.expose
-    def search_equipment(self, searchEquipment, field):
+    def search(self, table, toSearch, field):
         """
-        display elements in Equipment where insee contain searchEquipment
+        display elements in table where field in data base contain toSearch
         """
         to_return = ""
         to_return = to_return + "<table border=\"1\"> "
 
         to_return = to_return + "<tr>"
-        for element in db.get_name_of_column_in_array(pathDataBase, "Equipment"):
+        for element in db.get_name_of_column_in_array(pathDataBase, str(table)):
             to_return = to_return + "<td>"+element+"</td>"
         to_return = to_return + "</tr>"
 
-        to_return = to_return + db.search_element_of_table(pathDataBase, "Equipment", field, str(searchEquipment))
+        to_return = to_return + db.search_element_of_table(pathDataBase, str(table), field, str(toSearch))
         to_return = to_return + "</table>"
         return to_return
 
     @cherrypy.expose
-    def search_activity(self, searchActivity, field):
+    def SQL(self,query):
         """
-        display elements in Equipment where insee contain searchActivity
+        display interface for make query and display the result 
         """
-        to_return = ""
-        to_return = to_return + "<table border=\"1\"> "
 
-        to_return = to_return + "<tr>"
-        for element in db.get_name_of_column_in_array(pathDataBase, "Activity"):
-            to_return = to_return + "<td>"+element+"</td>"
-        to_return = to_return + "</tr>"
+        to_return = """
+        <form method="get" action="SQL">
+            make query: <input type="text" name="query"/>
+            <input type="submit">
+        </form>
+        """
+        if (str(query)!="init"):
+            to_return = to_return + "result of the query: </br><div style=\"background: #AAAAAA\">"
+            result = ""
 
-        to_return = to_return + db.search_element_of_table(pathDataBase, "Activity", field, str(searchActivity))
-        to_return = to_return + "</table>"
+            for elem in db.make_query(pathDataBase,query):
+                result = result + str(elem)
+                result = result + "</br>"
+            to_return = to_return + result + "</div>"
+
+
         return to_return
 
-    @cherrypy.expose
-    def search_installation(self, searchInstallation, field):
-        """
-        display elements in Installations where insee contain searchInstallation
-        """
-        to_return = ""
-        to_return = to_return + "<table border=\"1\"> "
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='web service.')
+    parser.add_argument('path_data_base', metavar='path_data_base', type=str, help='set the data base path')
 
-        to_return = to_return + "<tr>"
-        for element in db.get_name_of_column_in_array(pathDataBase, "Installations"):
-            to_return = to_return + "<td>"+element+"</td>"
-        to_return = to_return + "</tr>"
+    args = parser.parse_args()
 
-        to_return = to_return + db.search_element_of_table(pathDataBase, "Installations", field, str(searchInstallation))
-        to_return = to_return + "</table>"
-        return to_return
+    pathDataBase = args.path_data_base
+    if not os.path.isfile(args.path_data_base):
+        print("Error: file don't exists !")
+        sys.exit()
 
-
-cherrypy.quickstart(WebManager())
+    cherrypy.quickstart(WebManager())
