@@ -5,6 +5,8 @@ import argparse
 import os
 import sys
 
+from mako.template import Template
+from mako.lookup import TemplateLookup
 
 class WebManager(object):
 
@@ -19,7 +21,7 @@ class WebManager(object):
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
 
-        to_return = "database: <ul>"
+        to_return = "data base: <ul>"
 
         nbrIns = c.execute('SELECT count(*) FROM Installations').fetchone()
         to_return = to_return + "<li>" 
@@ -45,7 +47,7 @@ class WebManager(object):
         to_return = to_return + "</br> <a href=\"SQL?query=init\">make query in sqLite data base</a>"
 
 
-        return to_return+"</ul>"
+        return to_return+"</ul>"+"<a href=\"index\">return to index<a>"
 
     @cherrypy.expose
     def afficherTable(self, table):
@@ -73,7 +75,7 @@ class WebManager(object):
                 tmp =-1
             tmp = tmp + 1
 
-        return to_return+"</table>"
+        return to_return+"</table>"+"<a href=\"index\">return to index<a>"
 
     @cherrypy.expose
     def searchOption(self):
@@ -83,7 +85,8 @@ class WebManager(object):
         to_return = ""
 
         to_return = to_return +""" 
-        <h1>Search something in table</h1>
+        <h1>Search something</h1>
+        <h2>search in tables: </h2>
             <table border=\"1\">
                 <form method="get" action="search">
                     <tr>
@@ -94,7 +97,7 @@ class WebManager(object):
                             <input type="text" name="toSearch">
                         </td>
                         <td>
-                            <select name="field">
+                            <select name="field" id="searchEquipment">
         """
 
         for field in db.get_name_of_column_in_array(pathDataBase, "Equipment"):
@@ -109,16 +112,16 @@ class WebManager(object):
                     </tr>
                     <input style="display: none" name="table" value="Equipment">
                 </form>
-                <form method="get" action="search_activity">
+                <form method="get" action="search" >
                     <tr>
                         <td>
                             Activity
                         </td>
                         <td>
-                            <input type="text" name="searchActivity">
+                            <input type="text" name="toSearch">
                         </td>
                         <td>
-                            <select name="field">
+                            <select name="field" id="searchActivity">
         """
 
         for field in db.get_name_of_column_in_array(pathDataBase, "Activity"):
@@ -131,17 +134,18 @@ class WebManager(object):
                             <input type="submit">
                         </td>
                     </tr>
+                    <input style="display: none" name="table" value="Activity">
                 </form>
-                <form method="get" action="search_installation">
+                <form method="get" action="search">
                     <tr>
                         <td>
                             Installations
                         </td>
                         <td>
-                            <input type="text" name="searchInstallation">
+                            <input type="text" name="toSearch">
                         </td>
                         <td>
-                            <select name="field">
+                            <select name="field" id="searchInstallation">
         """
 
         for field in db.get_name_of_column_in_array(pathDataBase, "Installations"):
@@ -154,10 +158,82 @@ class WebManager(object):
                             <input type="submit">
                         </td>
                     </tr>
+                    <input style="display: none" name="table" value="Installations">
                 </form>
             </table>
         """
-        return to_return
+        to_return = to_return +"""
+        <h2>join tables 1 with table 2:</h2>
+            <script>
+                function actualiserField1(){
+                    var table1 = document.getElementById("table1");
+                    tableSelected = table1.options[table1.selectedIndex].value;
+
+                    if(tableSelected == "Equipment")
+                        document.getElementById("field1").innerHTML = document.getElementById("searchEquipment").innerHTML;
+                    if(tableSelected == "Activity")
+                        document.getElementById("field1").innerHTML = document.getElementById("searchActivity").innerHTML;
+                    if(tableSelected == "Installations")
+                        document.getElementById("field1").innerHTML = document.getElementById("searchInstallation").innerHTML;      
+                }
+
+                function actualiserField2(){
+                    var table1 = document.getElementById("table2");
+                    tableSelected = table1.options[table1.selectedIndex].value;
+
+                    if(tableSelected == "Equipment")
+                        document.getElementById("field2").innerHTML = document.getElementById("searchEquipment").innerHTML;
+                    if(tableSelected == "Activity")
+                        document.getElementById("field2").innerHTML = document.getElementById("searchActivity").innerHTML;
+                    if(tableSelected == "Installations")
+                        document.getElementById("field2").innerHTML = document.getElementById("searchInstallation").innerHTML;      
+                }
+            </script>
+            <form method="get" action="join">
+                <table border=\"1\">
+                    <tr>
+                        <td>num tab</td>
+                        <td>table</td>
+                        <td>field</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <select name="table1" id="table1">
+                                <option value=\"Activity\" selected onclick="actualiserField1()">Activity</option>
+                                <option value=\"Equipment\" onclick="actualiserField1()">Equipment</option>
+                                <option value=\"Installations\" onclick="actualiserField1()">Installations</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="field1" id="field1">
+                                <option selected onclick="actualiserField1()">click to refresh</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            <select name="table2" id="table2">
+                                <option value=\"Activity\" selected onclick="actualiserField2()">Activity</option>
+                                <option value=\"Equipment\" onclick="actualiserField2()">Equipment</option>
+                                <option value=\"Installations\" onclick="actualiserField2()">Installations</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="field2" id="field2">
+                                <option selected onload="actualiserField2()">click to refresh</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <input type=\"submit\" />
+            </form>
+            <script>actualiserField1();actualiserField2();</script>
+        """
+            
+        return to_return+"<a href=\"index\">return to index<a>"
+    
     @cherrypy.expose
     def search(self, table, toSearch, field):
         """
@@ -173,7 +249,17 @@ class WebManager(object):
 
         to_return = to_return + db.search_element_of_table(pathDataBase, str(table), field, str(toSearch))
         to_return = to_return + "</table>"
-        return to_return
+        return to_return+"<a href=\"index\">return to index<a>"
+
+    @cherrypy.expose
+    def join(self, table1, table2, field1, field2):
+        to_return=""
+        for row in db.jointure_table(pathDataBase, table1, table2, field1, field2):
+            to_return = to_return +"</br>"+ str(row)
+        if to_return!="":
+            return to_return
+        else:
+            return "nothing found"
 
     @cherrypy.expose
     def SQL(self,query):
@@ -183,7 +269,8 @@ class WebManager(object):
 
         to_return = """
         <form method="get" action="SQL">
-            make query: <input type="text" name="query"/>
+            make query: </br> <TEXTAREA name="query"></TEXTAREA>
+            </br>
             <input type="submit">
         </form>
         """
@@ -197,7 +284,7 @@ class WebManager(object):
             to_return = to_return + result + "</div>"
 
 
-        return to_return
+        return to_return+"<a href=\"index\">return to index<a>"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='web service.')

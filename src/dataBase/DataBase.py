@@ -6,7 +6,15 @@ import modele.Activity
 this file contains differents method for create table in a SQLite3 file 
 """
 
+def make_query(path, query):
+    conn = sqlite3.connect(path)
+    c = conn.cursor()
 
+    result = c.execute(query).fetchall()
+
+    conn.commit()
+    conn.close()
+    return result
 
 def init_data_base_installation(path):
 
@@ -35,16 +43,6 @@ def init_data_base_installation(path):
 
     conn.commit()
     conn.close()
-
-def make_query(path, query):
-    conn = sqlite3.connect(path)
-    c = conn.cursor()
-
-    result = c.execute(query).fetchall()
-
-    conn.commit()
-    conn.close()
-    return result
 
 def init_data_base_activity(path):
     """
@@ -138,10 +136,6 @@ def search_element_of_table(path, table, nameColumn, data):
     return to_return
 
 
-
-
-
-
 def import_equipment_object_in_array(path):
     """
     import all equipment object and insert into an array
@@ -174,3 +168,16 @@ def import_installations_object_in_array(path):
     path: the path of data base where are situate object
     """
     return "todo"
+
+def jointure_table(path, table1, table2, field1, field2):
+    """
+    make join between table1 and table2 where field1=field2
+    and return the result in array
+    """
+    conn = sqlite3.connect(path)
+    c = conn.cursor()
+    to_return = []
+    for row in c.execute('SELECT * FROM '+table1 +' '+table2+" where "+field1+"="+field2).fetchall():
+        to_return.append(row)
+    conn.close()
+    return to_return
