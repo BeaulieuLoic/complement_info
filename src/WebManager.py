@@ -250,7 +250,7 @@ class WebManager(object):
                     <td>actLib</td>
                     <td>Football</td>
                 </tr>
-            </table>a
+            </table>
             <script>actualiserField1();actualiserField2();</script>
         """
             
