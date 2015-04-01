@@ -5,9 +5,6 @@ import argparse
 import os
 import sys
 
-from mako.template import Template
-from mako.lookup import TemplateLookup
-
 class WebManager(object):
 
     @cherrypy.expose
@@ -21,14 +18,13 @@ class WebManager(object):
         conn = sqlite3.connect(pathDataBase)
         c = conn.cursor()
 
-        to_return = "data base: <ul>"
-
+        to_return = "<h1>data base</h1> <ul>"
+        to_return = to_return + "<h2>display all elements in table:</h2>"
         nbrIns = c.execute('SELECT count(*) FROM Installations').fetchone()
         to_return = to_return + "<li>" 
         to_return = to_return + "<a href=\"afficherTable?table=Installations\">number of Installations object: </a>"
         to_return = to_return + str(nbrIns).replace(",","").replace("(","").replace(")","")
         to_return = to_return + "</li>" 
-
 
         nbrAct = c.execute('SELECT count(*) FROM Activity').fetchone()
         to_return = to_return + "<li>" 
@@ -42,9 +38,14 @@ class WebManager(object):
         to_return = to_return + str(nbrEqu).replace(",","").replace("(","").replace(")","")
         to_return = to_return + "</li>" 
         to_return = to_return +"</ul>"
+
         conn.close()
+
+        to_return = to_return + "<h2>search somethin in table:</h2>"
         to_return = to_return + "<a href=\"searchOption\">search something</a>"
-        to_return = to_return + "</br> <a href=\"SQL?query=init\">make query in sqLite data base</a>"
+
+        to_return = to_return + "<h2>other:</h2>"
+        to_return = to_return + "<a href=\"SQL?query=init\">make query in sqLite data base</a>"
 
 
         return to_return+"</ul>"+"<a href=\"index\">return to index<a>"
@@ -87,7 +88,7 @@ class WebManager(object):
         to_return = to_return +""" 
         <h1>Search something</h1>
         <h2>search in tables: </h2>
-            <table border=\"1\">
+            <table border=\"10\">
                 <form method="get" action="search">
                     <tr>
                         <td>
@@ -190,11 +191,12 @@ class WebManager(object):
                 }
             </script>
             <form method="get" action="join">
-                <table border=\"1\">
+                <table border=\"10\">
                     <tr>
                         <td>num tab</td>
                         <td>table</td>
                         <td>field</td>
+                        <td>elements to search</td>
                     </tr>
                     <tr>
                         <td>1</td>
@@ -209,6 +211,9 @@ class WebManager(object):
                             <select name="field1" id="field1">
                                 <option selected onclick="actualiserField1()">click to refresh</option>
                             </select>
+                        </td>
+                        <td>
+                            <input type=\"text\" name="search1"/>
                         </td>
                     </tr>
                     <tr>
@@ -225,14 +230,31 @@ class WebManager(object):
                                 <option selected onload="actualiserField2()">click to refresh</option>
                             </select>
                         </td>
+                        <td>
+                            <input type=\"text\" name="search2"/>
+                        </td>
                     </tr>
                 </table>
                 <input type=\"submit\" />
             </form>
+
+            e.g with
+            <table border="10">
+                <tr>
+                    <td>Installations</td>
+                    <td>nameTown</td>
+                    <td>Nantes</td>
+                </tr>
+                <tr>
+                    <td>Activity</td>
+                    <td>actLib</td>
+                    <td>Football</td>
+                </tr>
+            </table>
             <script>actualiserField1();actualiserField2();</script>
         """
             
-        return to_return+"<a href=\"index\">return to index<a>"
+        return to_return+"</br><a href=\"index\">return to index<a>"
     
     @cherrypy.expose
     def search(self, table, toSearch, field):
@@ -252,14 +274,14 @@ class WebManager(object):
         return to_return+"<a href=\"index\">return to index<a>"
 
     @cherrypy.expose
-    def join(self, table1, table2, field1, field2):
+    def join(self, table1, table2, field1, field2, search1, search2):
         to_return=""
-        for row in db.jointure_table(pathDataBase, table1, table2, field1, field2):
+        for row in db.jointure_table(pathDataBase, table1, table2, field1, field2, search1, search2):
             to_return = to_return +"</br>"+ str(row)
         if to_return!="":
-            return to_return
+            return to_return+"</br><a href=\"index\">return to index<a>"
         else:
-            return "nothing found"
+            return "nothing found"+"</br><a href=\"index\">return to index<a>"
 
     @cherrypy.expose
     def SQL(self,query):

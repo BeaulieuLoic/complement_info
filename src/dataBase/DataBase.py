@@ -169,15 +169,13 @@ def import_installations_object_in_array(path):
     """
     return "todo"
 
-def jointure_table(path, table1, table2, field1, field2):
+def jointure_table(path, table1, table2, field1, field2, search1, search2):
     """
-    make join between table1 and table2 where field1=field2
+    make join between table1 and table2 where field1=search1 and field2 = search2
     and return the result in array
     """
     conn = sqlite3.connect(path)
     c = conn.cursor()
-    to_return = []
-    for row in c.execute('SELECT * FROM '+table1 +' '+table2+" where "+field1+"="+field2).fetchall():
-        to_return.append(row)
+    rows = c.execute('SELECT * FROM '+table1 +' as t1 JOIN '+table2+" as t2 where t1."+field1+" like '%"+search1+"%' and t2."+field2+" like '%"+search2+"%'").fetchall()
     conn.close()
-    return to_return
+    return rows
