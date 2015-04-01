@@ -1,0 +1,17 @@
+{
+	"version":"1",
+	"nb_results":1,
+	"data":[
+		{   "EquipementId" : " 213704" , 
+			"EquActiviteSalleSpe" : "Non" , 
+			"EquActivitePratique" : "Oui" , 
+			"EquActivitePraticable" : "Oui" , 
+			"ComLib" : "Chapelle-Basse-Mer" , 
+			"ActCode" : " 3501" , 
+			"ActNivLib" : "Loisir - Entretien - Remise en forme" , 
+			"ComInsee" : " 44029" , 
+			"ActLib" : "Gymnastique volontaire" , 
+			"EquNbEquIdentique" : " 1"
+		}
+	]
+}

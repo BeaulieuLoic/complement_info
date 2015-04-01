@@ -1,0 +1,14 @@
+{
+      "version":"1",
+      "nb_results":1,
+      "data":[
+          {
+          "ComLib": "TERRAIN EXTERIEUR DE VOLLEY- BALL",
+          "ComInsee": "49026",
+          "EquAnneeService": null,
+          "EquNomBatiment": null,
+          "EquNom": "coucou",
+          "EquipementFiche": "generique"
+          }
+      ]
+}

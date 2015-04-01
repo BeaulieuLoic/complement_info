@@ -15,6 +15,8 @@ def unserialise_installations_json(pathName):
     function for unserialise json file in object installation
     return list of Installation object
 
+    >>> unserialise_installations_json("testUnit/testIns.json")[0].installUpd
+    '9999-99-99'
 
     """
     to_return = []
@@ -41,9 +43,9 @@ def unserialise_installations_json(pathName):
                     install["Nb_Equipements"],
                     install["InsDateMaj"]))
     except FileNotFoundError:
-        print("bad path of activity json file")
+        print("bad path of installation json file")
     except KeyError:
-        print("bad json file, see documentation of activity for see how is construct this object")
+        print("bad json file, see documentation of installation for see how is construct this object")
         
     return to_return
 
@@ -51,6 +53,10 @@ def unserialise_activity_json(pathName):
     """
     function for unserialise json file in object installs
     return list of Activity object.
+
+    >>> unserialise_activity_json("testUnit/testAct.json")[0].equipementId
+    ' 213704'
+
     """
     to_return = []
 
@@ -74,13 +80,16 @@ def unserialise_activity_json(pathName):
         print("bad path of activity json file")
     except KeyError:
         print("bad json file, see documentation of activity for see how is construct this object")
-
     return to_return
 
 def unserialise_equipment_json(pathName):
     """
     function for unserialise json file in object equipment
     return list of Equipement object
+
+    >>> unserialise_equipment_json("testUnit/testEqu.json")[0].comInsee
+    '49026'
+
     """
     to_return = []
     try:
@@ -112,6 +121,7 @@ def object_export_in_dataBase(object_array, pathFile):
     object_array: array of object
     pathFile: path of SQLite's file
     object in array need to implement exportToDataBase fucntion.
+
     """
     conn = sqlite3.connect(pathFile)
 
